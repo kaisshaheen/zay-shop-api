@@ -7,12 +7,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Middleware\CorsMiddleware;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
+use Laravel\Socialite\Facades\Socialite;
 
 //user
 Route::get('/users', function (Request $request) {
@@ -23,6 +20,10 @@ Route::post("/register" , [AuthController::class , "register"]);
 Route::post("/login" , [AuthController::class , "login"]);
 Route::post("/logout" , [AuthController::class , "logout"])->middleware('auth:sanctum');
 
+
+//SignIn with google
+
+Route::post('/auth/google', [AuthController::class, 'google']);
 
 
 Route::middleware(['signed'])->group(function () {

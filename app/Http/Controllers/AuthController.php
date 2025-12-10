@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LogInRequest;
 use App\Http\Requests\SignUpRequest;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use App\Services\User\CreateUserService;
 use App\Services\User\FindEmailService;
 use Illuminate\Http\Request;
 use App\Traits\PasswordsTrait;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\GoogleProvider;
 
 class AuthController extends Controller
 {
@@ -51,4 +55,27 @@ class AuthController extends Controller
             "message" => "you are logged out"
         ]; 
     }
+
+
+
+    //SignIn with google
+
+  
+    public function google(Request $request)
+    {
+      
+    /** @var GoogleProvider $driver */
+    $driver = Socialite::driver('google')->stateless();
+    
+    $googleUser = $driver->redirectUrl($request->redirect_uri)->user();
+
+    $user = User::firstOrCreate(
+        ['email' => $googleUser->getEmail()],
+        ['name' => $googleUser->getName(), 'password' => bcrypt(Str::random(16))]
+    );
+
+    $token = $user->createToken('google')->plainTextToken;
+
+    return response()->json(['user' => $user, 'token' => $token]);
+}
 }
