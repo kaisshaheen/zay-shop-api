@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use App\Http\Requests\LogInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
@@ -74,7 +75,10 @@ class AuthController extends Controller
         ['name' => $googleUser->getName(), 'password' => bcrypt(Str::random(16))]
     );
 
+
     $token = $user->createToken('google')->plainTextToken;
+
+    event(new UserRegistered($user));
 
     return response()->json(['user' => $user, 'token' => $token]);
 }
