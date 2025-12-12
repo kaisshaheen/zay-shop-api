@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function processCheckout(Request $request){
         $field = $request->validate([
             'shipping_address' => 'required|string|max:255',
-            'billing_address' => 'sometimes|string|max:255',
+            'billing_address' => 'sometimes|string|max:255 | nullable',
         ]);
 
         try{
