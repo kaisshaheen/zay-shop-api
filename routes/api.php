@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +48,10 @@ Route::middleware("auth:sanctum")->group(function(){
     Route::post("/checkout" , [OrderController::class , "processCheckout"]);
     Route::get("/orders" , [OrderController::class , "index"]);
     Route::get("/orders/{order}" , [OrderController::class , "show"]);
+    Route::post('/orders/{orderId}/checkout', [PaymentController::class, 'checkout']);
 });
+
+Route::post('/webhook', [PaymentController::class, 'webhook']);
 
 Route::apiResource("/category" , CategoryController::class);
 Route::delete("/deleteallcategories" , [CategoryController::class , "deleteAllCategories"]);

@@ -11,8 +11,13 @@ class Order extends Model
         'user_id',
         'status',
         'total_price',
+        'session_id',
         'shipping_address',
         'billing_address',
+        'stripe_payment_intent_id',
+        'amount_paid',
+        'currency',
+        'paid_at'
     ];
 
     public function orderItems(): HasMany
